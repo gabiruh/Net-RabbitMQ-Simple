@@ -8,32 +8,40 @@ use Net::RabbitMQ::Simple;
 my $host = $ENV{'MQHOST'};
 
 SKIP: {
-    skip 'No $ENV{\'MQHOST\'}\n', 2 unless $host;
+  skip 'No $ENV{\'MQHOST\'}\n', 2 unless $host;
 
-    my $mq = mqconnect {
-        hostname => $host,
-        user => 'guest',
-        password => 'guest',
-        vhost => '/'
-    };
+  my $mq = mqconnect {
+    hostname => $host,
+    user     => 'guest',
+    password => 'guest',
+    vhost    => '/'
+  };
 
-    publish {
-        exchange => 'mtest_x',
-        queue => 'mtest_get',
-        route => 'mtest_get_route',
-        message => 'message get',
-        options => { content_type => 'text/plain' }
-    };
+  exchange {
+    name        => 'mtest_x',
+    type        => 'direct',
+    passive     => 0,
+    durable     => 0,
+    auto_delete => 1,
+    exclusive   => 0
+  };
 
-    my $getr = get;
-    ok($getr);
+  publish {
+    exchange => 'mtest_x',
+    queue    => 'mtest_get',
+    route    => 'mtest_get_route',
+    message  => 'message get',
+    options  => { content_type => 'text/plain' }
+  };
 
-    $getr = get;
-    is($getr, undef, 'get should return empty');
+  my $getr = get;
+  ok($getr);
 
-    mqdisconnect;
+  $getr = get;
+  is( $getr, undef, 'get should return empty' );
+
+  mqdisconnect;
 }
 
 1;
-
 

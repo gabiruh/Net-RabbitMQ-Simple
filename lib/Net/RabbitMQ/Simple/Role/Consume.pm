@@ -1,7 +1,6 @@
-package Net::RabbitMQ::Simple::Consume;
+package Net::RabbitMQ::Simple::Role::Consume;
 
-use Moose;
-use Moose::Util::TypeConstraints;
+use Moose::Role;
 use namespace::autoclean;
 
 # consume and get.
@@ -16,7 +15,7 @@ sub consume {
     # for ack option
     $props{no_ack} = $self->no_ack if !defined($props{no_ack});
     # todo: check if the channel is open.
-    $self->conn->consume($self->channel, $self->queue_name, { %props });
+    $self->conn->consume($self->channel, $self->queue_name, \%props );
 }
 
 sub get {
@@ -25,13 +24,11 @@ sub get {
     # for ack option
     $props{no_ack} = $self->no_ack if !defined($props{no_ack});
     # todo: check if the channel is open.
-    $self->conn->get($self->channel, $self->queue_name, { %props });
+    $self->conn->get($self->channel, $self->queue_name, \%props);
 }
 
 
 sub recv () { shift->conn->recv() }
-
-__PACKAGE__->meta->make_immutable;
 
 1;
 

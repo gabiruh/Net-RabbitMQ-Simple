@@ -7,8 +7,9 @@ use lib "$Bin/lib";
 use POE qw(Wheel::Run Filter::Reference);
 use Net::RabbitMQ::Simple;
 
+use Test::LeakTrace;
 sub MAX_CONCURRENT_TASKS () { 50 }
-sub NUM_TASKS () { 100 }
+sub NUM_TASKS () { 4 }
 our $task_counter = 0;
 
 POE::Session->create(
@@ -44,7 +45,7 @@ sub task_consume {
     my $task = shift;
     my $filter = POE::Filter::Reference->new();
 
-    mqconnect; # share ?
+    mqconnect { hostname => $ENV{MQHOST} }; # share ?
 
     publish {
         exchange => 'triagem',
@@ -59,7 +60,7 @@ sub task_consume {
         task => $task,
         rv => $rv
     );
-
+    
     my $output = $filter->put([\%result]);
 }
 
@@ -78,6 +79,7 @@ sub sig_child {
     my $details = delete $heap->{$pid};
     warn "$$: Child $pid exited";
 }
+
 
 $poe_kernel->run();
 exit 0;

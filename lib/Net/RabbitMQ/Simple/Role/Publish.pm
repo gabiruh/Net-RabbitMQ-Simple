@@ -1,8 +1,8 @@
-package Net::RabbitMQ::Simple::Publish;
+package Net::RabbitMQ::Simple::Role::Publish;
 
-use Moose;
-use Moose::Util::TypeConstraints;
-use namespace::autoclean;
+use Moose::Role;
+
+requires 'conn';
 
 has 'body' => (
     is => 'rw', 
@@ -39,6 +39,5 @@ sub publish {
 
 }
 
-__PACKAGE__->meta->make_immutable;
 1;
 

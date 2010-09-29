@@ -6,6 +6,7 @@ use 5.008001;
 use Devel::Declare ();
 use Carp qw/ confess /;
 use namespace::autoclean;
+use Scalar::Util 'weaken';
 
 extends 'Devel::Declare::Context::Simple';
 
@@ -83,7 +84,8 @@ This method returns the L<Net::RabbitMQ> object.
 
 =cut
 
-our $_mq;
+my $_mq;
+
 
 sub mqconnect (@) {
     $_mq = Wrapper->new(@_);

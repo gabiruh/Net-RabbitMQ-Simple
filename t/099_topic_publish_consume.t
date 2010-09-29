@@ -8,57 +8,60 @@ use Net::RabbitMQ::Simple;
 my $host = $ENV{'MQHOST'};
 
 SKIP: {
-    skip 'No $ENV{\'MQHOST\'}\n', 3 unless $host;
+  skip 'No $ENV{\'MQHOST\'}\n', 3 unless $host;
 
-    my $mq = mqconnect {
-        hostname => $host,
-        user => 'guest',
-        password => 'guest',
-        vhost => '/'
-    };
+  my $mq = mqconnect {
+    hostname => $host,
+    user     => 'guest',
+    password => 'guest',
+    vhost    => '/'
+  };
 
-    exchange {
-        name => 'ex_topic',
-        type => 'topic',
-        passive => 0,
-        durable => 1,
-        auto_delete => 1,
-        exclusive => 0
-    };
+  exchange {
+    name        => 'ex_topic',
+    type        => 'topic',
+    passive     => 0,
+    durable     => 1,
+    auto_delete => 1,
+    exclusive   => 0
+  };
 
-    ok($mq->exchange_name);
+  ok( $mq->exchange_name );
 
-    publish {
-        exchange => 'ex_topic',
-        queue => 'foo.bar',
-        route => 'foo.bar',
-        message => 'message foo.bar',
-        options => { content_type => 'text/plain' }
-    };
+  publish {
+    exchange => 'ex_topic',
+    queue    => 'foo.bar',
+    route    => 'foo.bar',
+    message  => 'message foo.bar',
+    options  => { content_type => 'text/plain' }
+  };
 
-    my $rv = {};
+  my $rv = {};
 
-    $rv = get { options => { 
-            exchange => 'ex_topic',
-            routing_key => 'foo.*' } 
-    };
-    ok($rv);
+  $rv = get {
+    options => {
+      exchange    => 'ex_topic',
+      routing_key => 'foo.*'
+    }
+  };
+  ok($rv);
 
-    publish {
-        exchange => 'ex_topic',
-        queue => 'foo.baz',
-        route => 'foo.baz',
-        message => 'message foo.baz',
-        options => { 
-            exchange => 'ex_topic',
-            content_type => 'text/plain' }
-    };
+  publish {
+    exchange => 'ex_topic',
+    queue    => 'foo.baz',
+    route    => 'foo.baz',
+    message  => 'message foo.baz',
+    options  => {
+      exchange     => 'ex_topic',
+      content_type => 'text/plain'
+    }
+  };
 
-    $rv = get { options => { routing_key => '#.baz' } } ;
+  $rv = get { options => { routing_key => '#.baz' } };
 
-    ok($rv);
+  ok($rv);
 
-    mqdisconnect;
+  mqdisconnect;
 }
 
 1;

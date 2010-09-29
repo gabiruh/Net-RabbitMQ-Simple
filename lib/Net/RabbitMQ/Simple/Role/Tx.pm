@@ -1,8 +1,8 @@
-package Net::RabbitMQ::Simple::Tx;
+package Net::RabbitMQ::Simple::Role::Tx;
 
-use Moose;
-use Moose::Util::TypeConstraints;
-use namespace::autoclean;
+use Moose::Role;
+
+requires 'conn';
 
 sub tx () { 
     my $self = shift;
@@ -18,8 +18,6 @@ sub commit() {
     my $self = shift;
     $self->conn->tx_commit($self->channel); 
 }
-
-__PACKAGE__->meta->make_immutable;
 
 1;
 
