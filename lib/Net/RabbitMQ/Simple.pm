@@ -84,7 +84,7 @@ This method returns the L<Net::RabbitMQ> object.
 
 =cut
 
-my $_mq;
+our $_mq;
 
 
 sub mqconnect (@) {
@@ -131,7 +131,7 @@ Delete an exchange if is possible.
 
 sub exchange_delete (@) {
     my ($opt) = @_;
-    
+
     my $exchange = $opt->{name};
     Carp::confess("please give the exchange name") if !$exchange;
     delete $opt->{name};

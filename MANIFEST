@@ -2,11 +2,12 @@ Makefile.PL
 MANIFEST
 README.pod
 lib/Net/RabbitMQ/Simple.pm
-lib/Net/RabbitMQ/Simple/Consume.pm
-lib/Net/RabbitMQ/Simple/Exchange.pm
-lib/Net/RabbitMQ/Simple/Publish.pm
-lib/Net/RabbitMQ/Simple/Queue.pm
-lib/Net/RabbitMQ/Simple/Tx.pm
+lib/Net/RabbitMQ/Simple/Role/Consume.pm
+lib/Net/RabbitMQ/Simple/Role/Exchange.pm
+lib/Net/RabbitMQ/Simple/Role/Publish.pm
+lib/Net/RabbitMQ/Simple/Role/Queue.pm
+lib/Net/RabbitMQ/Simple/Role/Tx.pm
+lib/Net/RabbitMQ/Simple/Types.pm
 lib/Net/RabbitMQ/Simple/Wrapper.pm
 META.yml
 t/000_use_ok.t
