@@ -2,8 +2,7 @@ package Net::RabbitMQ::Simple::Wrapper;
 
 use Moose;
 use Net::RabbitMQ;
-use Net::RabbitFoot;
-use Test::Net::RabbitMQ;
+
 use namespace::autoclean;
 
 has conn => (
